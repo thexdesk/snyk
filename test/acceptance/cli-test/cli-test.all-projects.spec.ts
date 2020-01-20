@@ -70,7 +70,7 @@ export const AllProjectsTests: AcceptanceTests = {
       );
     },
 
-    '`test --all-projects and --file payloads are the same`': (
+    '`test mono-repo-project --all-projects and --file payloads are the same`': (
       params,
       utils,
     ) => async (t) => {
