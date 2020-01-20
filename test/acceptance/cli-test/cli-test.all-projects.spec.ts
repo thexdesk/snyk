@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as sinon from 'sinon';
 
 export const AllProjectsTests: AcceptanceTests = {
-  language: 'Mixed (Ruby & Npm & Maven)',
+  language: 'Mixed (Ruby, Npm, Maven, Python)',
   tests: {
     '`test mono-repo-project with lockfiles --all-projects`': (
       params,
@@ -20,6 +20,7 @@ export const AllProjectsTests: AcceptanceTests = {
       t.ok(spyPlugin.withArgs('rubygems').calledOnce, 'calls rubygems plugin');
       t.ok(spyPlugin.withArgs('npm').calledOnce, 'calls npm plugin');
       t.ok(spyPlugin.withArgs('maven').calledOnce, 'calls maven plugin');
+      t.ok(spyPlugin.withArgs('python').calledOnce, 'calls python plugin');
 
       params.server.popRequests(3).forEach((req) => {
         t.equal(req.method, 'POST', 'makes POST request');
@@ -32,7 +33,7 @@ export const AllProjectsTests: AcceptanceTests = {
         t.ok(req.body.depGraph, 'body contains depGraph');
         t.match(
           req.body.depGraph.pkgManager.name,
-          /(npm|rubygems|maven)/,
+          /(npm|rubygems|maven|python)/,
           'depGraph has package manager',
         );
       });
@@ -67,6 +68,16 @@ export const AllProjectsTests: AcceptanceTests = {
         result,
         'Target file:       pom.xml',
         'contains target file pom.xml',
+      );
+      t.match(
+        result,
+        'Target file:       Pipfile',
+        'contains target file Pipfile',
+      );
+      t.match(
+        result,
+        'Target file:       requirements.txt',
+        'contains target file requirements.txt',
       );
     },
 
