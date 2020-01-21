@@ -150,8 +150,6 @@ export const AllProjectsTests: AcceptanceTests = {
         .popRequests(5)
         .filter((req) => req.url.includes('/monitor/'));
 
-      console.log(pipAll);
-
       // Ruby
       await params.cli.monitor('mono-repo-project', {
         file: 'Gemfile.lock',
@@ -173,6 +171,14 @@ export const AllProjectsTests: AcceptanceTests = {
         file: 'pom.xml',
       });
       const [requestsMaven] = params.server
+        .popRequests(2)
+        .filter((req) => req.url.includes('/monitor/'));
+
+      // pip
+      await params.cli.monitor('mono-repo-project', {
+        file: 'Pipfile',
+      });
+      const [requestsPip] = params.server
         .popRequests(2)
         .filter((req) => req.url.includes('/monitor/'));
 
@@ -201,6 +207,19 @@ export const AllProjectsTests: AcceptanceTests = {
         npmAll.body,
         requestsNpm.body,
         'Same body for --all-projects and --file=package-lock.json',
+      );
+
+      // Pip project
+
+      // Removing properties that are different for plugin and custom-plugin
+      // (pluginName, pluginRuntime)
+      delete pipAll.body.meta.pluginName;
+      delete requestsPip.body.meta.pluginName;
+      delete requestsPip.body.meta.pluginRuntime;
+      t.deepEqual(
+        pipAll.body,
+        requestsPip.body,
+        'Same body for --all-projects and --file=Pipfile',
       );
 
       // Maven project
