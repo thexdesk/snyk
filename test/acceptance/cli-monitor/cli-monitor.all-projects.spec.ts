@@ -146,9 +146,11 @@ export const AllProjectsTests: AcceptanceTests = {
         allProjects: true,
       });
       // Pop all calls to server and filter out calls to `featureFlag` endpoint
-      const [rubyAll, npmAll, mavenAll] = params.server
-        .popRequests(4)
+      const [rubyAll, pipAll, npmAll, mavenAll] = params.server
+        .popRequests(5)
         .filter((req) => req.url.includes('/monitor/'));
+
+      console.log(pipAll);
 
       // Ruby
       await params.cli.monitor('mono-repo-project', {
