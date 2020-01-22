@@ -75,63 +75,58 @@ export const AllProjectsTests: AcceptanceTests = {
         'Target file:       Pipfile',
         'contains target file Pipfile',
       );
-      // t.match(
-      //   result,
-      //   'Target file:       requirements.txt',
-      //   'contains target file requirements.txt',
-      // );
     },
 
-    // '`test mono-repo-project --all-projects and --file payloads are the same`': (
-    //   params,
-    //   utils,
-    // ) => async (t) => {
-    //   utils.chdirWorkspaces();
-    //   const spyPlugin = sinon.spy(params.plugins, 'loadPlugin');
-    //   t.teardown(spyPlugin.restore);
-    //
-    //   await params.cli.test('mono-repo-project', {
-    //     allProjects: true,
-    //   });
-    //   const [
-    //     rubyAllProjectsBody,
-    //     npmAllProjectsBody,
-    //     mavenAllProjectsBody,
-    //   ] = params.server.popRequests(3).map((req) => req.body);
-    //
-    //   await params.cli.test('mono-repo-project', {
-    //     file: 'Gemfile.lock',
-    //   });
-    //   const { body: rubyFileBody } = params.server.popRequest();
-    //
-    //   await params.cli.test('mono-repo-project', {
-    //     file: 'package-lock.json',
-    //   });
-    //   const { body: npmFileBody } = params.server.popRequest();
-    //
-    //   await params.cli.test('mono-repo-project', {
-    //     file: 'pom.xml',
-    //   });
-    //   const { body: mavenFileBody } = params.server.popRequest();
-    //
-    //   t.same(
-    //     rubyAllProjectsBody,
-    //     rubyFileBody,
-    //     'Same body for --all-projects and --file=Gemfile.lock',
-    //   );
-    //
-    //   t.same(
-    //     npmAllProjectsBody,
-    //     npmFileBody,
-    //     'Same body for --all-projects and --file=package-lock.json',
-    //   );
-    //
-    //   t.same(
-    //     mavenAllProjectsBody,
-    //     mavenFileBody,
-    //     'Same body for --all-projects and --file=pom.xml',
-    //   );
-    // },
+    '`test mono-repo-project --all-projects and --file payloads are the same`': (
+      params,
+      utils,
+    ) => async (t) => {
+      utils.chdirWorkspaces();
+      const spyPlugin = sinon.spy(params.plugins, 'loadPlugin');
+      t.teardown(spyPlugin.restore);
+
+      await params.cli.test('mono-repo-project', {
+        allProjects: true,
+      });
+      const [
+        rubyAllProjectsBody,
+        npmAllProjectsBody,
+        mavenAllProjectsBody,
+      ] = params.server.popRequests(3).map((req) => req.body);
+
+      await params.cli.test('mono-repo-project', {
+        file: 'Gemfile.lock',
+      });
+      const { body: rubyFileBody } = params.server.popRequest();
+
+      await params.cli.test('mono-repo-project', {
+        file: 'package-lock.json',
+      });
+      const { body: npmFileBody } = params.server.popRequest();
+
+      await params.cli.test('mono-repo-project', {
+        file: 'pom.xml',
+      });
+      const { body: mavenFileBody } = params.server.popRequest();
+
+      t.same(
+        rubyAllProjectsBody,
+        rubyFileBody,
+        'Same body for --all-projects and --file=Gemfile.lock',
+      );
+
+      t.same(
+        npmAllProjectsBody,
+        npmFileBody,
+        'Same body for --all-projects and --file=package-lock.json',
+      );
+
+      t.same(
+        mavenAllProjectsBody,
+        mavenFileBody,
+        'Same body for --all-projects and --file=pom.xml',
+      );
+    },
     //
     // '`test maven-multi-app --all-projects --detection-depth=2`': (
     //   params,
