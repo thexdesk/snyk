@@ -90,9 +90,15 @@ export const AllProjectsTests: AcceptanceTests = {
       });
       const [
         rubyAllProjectsBody,
+        pipAllProjectsBody,
         npmAllProjectsBody,
         mavenAllProjectsBody,
-      ] = params.server.popRequests(3).map((req) => req.body);
+      ] = params.server.popRequests(4).map((req) => req.body);
+
+      await params.cli.test('mono-repo-project', {
+        file: 'Pipfile',
+      });
+      const { body: pipFileBody } = params.server.popRequest();
 
       await params.cli.test('mono-repo-project', {
         file: 'Gemfile.lock',
@@ -108,6 +114,14 @@ export const AllProjectsTests: AcceptanceTests = {
         file: 'pom.xml',
       });
       const { body: mavenFileBody } = params.server.popRequest();
+
+      // Forcing targetFile into the payload as the new plugin doesn't return
+      // it;
+      t.same(
+        pipAllProjectsBody,
+        pipFileBody,
+        'Same body for --all-projects and --file=Pipfile',
+      );
 
       t.same(
         rubyAllProjectsBody,
