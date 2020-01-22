@@ -191,7 +191,7 @@ function chooseBestManifest(
       return packageJson.path;
     }
     case 'rubygems': {
-      debug('Encountered multiple pip manifest files, defaulting to "Gemfile.lock"');
+      debug('Encountered multiple gem manifest files, defaulting to "Gemfile.lock"');
       const defaultManifest = files.filter((path) =>
         ['Gemfile.lock'].includes(path.base),
       )[0];
