@@ -216,8 +216,19 @@ export const AllProjectsTests: AcceptanceTests = {
       delete pipAll.body.meta.pluginName;
       delete requestsPip.body.meta.pluginName;
       delete requestsPip.body.meta.pluginRuntime;
+
+      // Python plugin (actually "custom-auto-detect" plugin) does't return
+      // "targetFile" prop as expected, so we picked it from another part of
+      // the req;
+      const {
+        context: {
+          package: {
+            targetFile: pipTargetFile,
+          },
+        },
+      } = pipAll;
       t.deepEqual(
-        pipAll.body,
+        {...pipAll.body, targetFile: pipTargetFile},
         requestsPip.body,
         'Same body for --all-projects and --file=Pipfile',
       );
